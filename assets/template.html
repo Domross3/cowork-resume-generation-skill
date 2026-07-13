@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>RESUME — Full Name</title>
+<style>
+  @page { size: letter; margin: 0.5in; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 10pt;
+    line-height: 1.25;
+    color: #111;
+    max-width: 7.5in;
+    margin: 0 auto;
+    padding: 24px; /* on-screen only; @page margin governs print */
+  }
+  @media print { body { padding: 0; } }
+  header { text-align: center; margin-bottom: 6px; }
+  h1 { font-size: 17pt; letter-spacing: 0.5px; }
+  .contact { font-size: 9pt; margin-top: 2px; }
+  .contact a { color: #111; text-decoration: none; }
+  h2 {
+    font-size: 10.5pt; text-transform: uppercase; letter-spacing: 1px;
+    border-bottom: 1px solid #111; margin: 8px 0 4px;
+  }
+  .entry { margin-bottom: 4px; }
+  .entry-head { display: flex; justify-content: space-between; }
+  .entry-head .role { font-weight: bold; }
+  .entry-head .dates { font-style: italic; }
+  ul { list-style: disc; margin-left: 16px; }
+  li { margin-bottom: 1px; }
+  .skills p, .note { margin-bottom: 2px; }
+  .note { font-size: 8.9pt; font-style: italic; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>FULL NAME</h1>
+  <div class="contact">City, ST · email@example.com · (555) 555-5555 · linkedin.com/in/handle · github.com/handle</div>
+</header>
+
+<section>
+  <h2>Education</h2>
+  <div class="entry">
+    <div class="entry-head"><span class="role">University Name — Degree</span><span class="dates">Start – End</span></div>
+    <ul>
+      <li>GPA, honors, scholarships</li>
+      <li>Relevant coursework: fill this line to near its end — there is always one more course to add</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <h2>Experience</h2>
+  <div class="entry">
+    <div class="entry-head"><span class="role">Title | Organization</span><span class="dates">Start – End</span></div>
+    <ul>
+      <li>Defensible, quantified bullet drawn from PROFILE.md</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <h2>Projects</h2>
+  <div class="entry">
+    <div class="entry-head"><span class="role">Project Name — role (github.com/handle/repo)</span><span class="dates">Dates</span></div>
+    <ul>
+      <li>What it does, stack, one defensible result</li>
+    </ul>
+  </div>
+</section>
+
+<section class="skills">
+  <h2>Skills</h2>
+  <p><strong>Category:</strong> item, item, item — run to near end-of-line</p>
+  <p class="note">Disclosure or framing note if the profile requires one (8.9pt, ~112 chars/line)</p>
+</section>
+
+<!-- AUDIT SCRIPT — do not remove; only activates with ?audit in the URL, never prints -->
+<script>
+if (location.search.includes('audit')) {
+  addEventListener('load', () => {
+    const lh = el => { const v = parseFloat(getComputedStyle(el).lineHeight); return isNaN(v) ? parseFloat(getComputedStyle(el).fontSize) * 1.2 : v; };
+    const rows = [];
+    document.querySelectorAll('li, .skills p, .note').forEach(el => {
+      const r = el.getBoundingClientRect(); if (r.height < 2) return;
+      const lines = Math.round(r.height / lh(el));
+      const range = document.createRange(); range.selectNodeContents(el);
+      const rects = Array.from(range.getClientRects()).filter(x => x.width > 1 && x.height > 2);
+      const last = rects[rects.length - 1];
+      const fill = last ? Math.round(100 * last.width / r.width) : 0;
+      const flag = (lines > 1 && fill < 50) ? 'DANGLE' : (lines === 1 && fill < 80 && !el.classList.contains('note') ? 'SHORT' : 'ok');
+      rows.push(`${flag} | lines=${lines} fill=${fill}% | ${el.textContent.trim().slice(0, 48)}`);
+    });
+    const pagePx = 10 * 96; // 960px = one Letter page at 0.5in margins
+    const used = document.body.scrollHeight - 48; // minus on-screen body padding
+    const pre = document.createElement('pre');
+    pre.id = 'auditbox';
+    pre.style.cssText = 'font-size:11px;background:#ffc;padding:8px;margin-bottom:16px;white-space:pre-wrap;line-height:1.35;';
+    pre.textContent = `AUDIT-REPORT\npage-fill=${Math.round(100 * used / pagePx)}% (content ${used}px of ${pagePx}px)\n` + rows.join('\n') + '\nEND-AUDIT';
+    document.body.insertBefore(pre, document.body.firstChild);
+  });
+}
+</script>
+</body>
+</html>
